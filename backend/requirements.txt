@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pydicom
+pillow
+requests
+openai
+numpy
+inference_sdk
+python-multipart
+pylibjpeg
+pylibjpeg-libjpeg
+pylibjpeg-openjpeg
