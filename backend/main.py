@@ -10,6 +10,16 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="oralcare")
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 CLIENT = InferenceHTTPClient(
     api_url="https://serverless.roboflow.com",
     api_key="PWoAQ2n5VnUlhyUSukff"
