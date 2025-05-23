@@ -80,9 +80,9 @@ async def detect(file: UploadFile = File(...)):
 
 
 from fastapi.responses import JSONResponse
-import openai  # or use your mock logic
+import openai  
 
-openai.api_key = "" # or leave blank for mock
+openai.api_key = "" 
 
 from fastapi import Body
 
