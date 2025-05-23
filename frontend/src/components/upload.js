@@ -1,36 +1,54 @@
 import { useRef, useState } from "react";
 import client from "../api/client";
+import Spinner from "./Spinner";
 
 export default function FileUpload({ onUpload }) {
   const fileInput = useRef();
   const [loading, setLoading] = useState(false);
 
-  const uploadDicom = async () => {
-    const file = fileInput.current.files[0];
-    if (!file) return;
-    setLoading(true);
-    const form = new FormData();
-    form.append("file", file);
+  const uploadAll = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
+    setLoading(true);
     try {
-      const res = await client.post("/upload/", form, {
-        responseType: "blob",
+      const uploads = files.map(async (file) => {
+        const form = new FormData();
+        form.append("file", file);
+        const res = await client.post("/upload/", form, {
+          responseType: "blob",
+        });
+        return URL.createObjectURL(res.data);
       });
-      const url = URL.createObjectURL(res.data);
-      onUpload(url);
+      const urls = await Promise.all(uploads);
+      onUpload(urls);
     } catch (err) {
-      alert("Upload failed: " + err.message);
+      alert("One or more uploads failed: " + err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h3>Upload DICOM</h3>
-      <input type="file" accept=".dcm,.rvg" ref={fileInput} />
-      <button disabled={loading} onClick={uploadDicom}>
-        {loading ? "Uploading..." : "Upload & Convert"}
+    <div style={{ position: "relative" }}>
+      <h3>Upload DICOM(s)</h3>
+      <input
+        type="file"
+        accept=".dcm,.rvg"
+        multiple
+        ref={fileInput}
+        onChange={uploadAll}
+        disabled={loading}
+      />
+
+      {loading && <Spinner />}
+
+      <button
+        disabled={loading}
+        onClick={() => fileInput.current.click()}
+        style={{ marginTop: "8px" }}
+      >
+        {loading ? "Uploading..." : "Select & Upload Files"}
       </button>
     </div>
   );

@@ -1,92 +1,90 @@
 import { useRef, useState } from "react";
 import client from "../api/client";
+import Spinner from "./Spinner";
 
-export default function ImageCanvas({ imageUrl, onDetect }) {
-  const imgRef = useRef();
-  const canvasRef = useRef();
-  const [loading, setLoading] = useState(false);
+export default function ImageCanvas({ imageUrls = [], onDetect }) {
+  // refs and loading flags per image
+  const imgRefs = useRef([]);
+  const canvasRefs = useRef([]);
+  const [loadingMap, setLoadingMap] = useState({});
 
-  // Resize canvas when image loads
-  const onImageLoad = () => {
-    const img = imgRef.current;
-    const canvas = canvasRef.current;
-    canvas.width = img.clientWidth;
-    canvas.height = img.clientHeight;
-  };
-
-  const runDetection = async () => {
-    if (!imageUrl) return;
-    setLoading(true);
-
-    // Fetch blob from URL
-    const blob = await fetch(imageUrl).then((r) => r.blob());
-    const form = new FormData();
-    form.append("file", blob, "converted.png");
+  const runDetection = async (idx) => {
+    const imageUrl = imageUrls[idx];
+    setLoadingMap((m) => ({ ...m, [idx]: true }));
 
     try {
+      const blob = await fetch(imageUrl).then((r) => r.blob());
+      const form = new FormData();
+      form.append("file", blob, "converted.png");
       const { data } = await client.post("/detect/", form);
       const preds = data.predictions || [];
-      console.log("Detection response:", data);
-      if (preds.length === 0) {
-        alert("No cavities detected.");
-      }
-      drawBoxes(preds);
-      onDetect(preds);
+      drawBoxes(idx, preds);
+      
+      // collect all predictions into an array in index order
+      onDetect((prev = []) => {
+        const next = [...prev];
+        next[idx] = preds;
+        return next;
+      });
     } catch (err) {
       alert("Detection failed: " + err.message);
     } finally {
-      setLoading(false);
+      setLoadingMap((m) => ({ ...m, [idx]: false }));
     }
   };
 
-  const drawBoxes = (preds) => {
-    const canvas = canvasRef.current;
+  const drawBoxes = (idx, preds) => {
+    const canvas = canvasRefs.current[idx];
+    const img = imgRefs.current[idx];
     const ctx = canvas.getContext("2d");
-    const img = imgRef.current;
+    canvas.width = img.clientWidth;
+    canvas.height = img.clientHeight;
 
-    // Clear previous drawings
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.lineWidth = 2;
     ctx.font = "16px sans-serif";
     ctx.fillStyle = "red";
     ctx.strokeStyle = "red";
 
-    // Scale factors if image displayed size != natural size
     const xScale = canvas.width / img.naturalWidth;
     const yScale = canvas.height / img.naturalHeight;
 
-    preds.forEach((p) => {
-      const { x, y, width, height, class: cls, confidence } = p;
-      // Apply scaling
-      const sx = x * xScale;
-      const sy = y * yScale;
-      const sw = width * xScale;
-      const sh = height * yScale;
-
+    preds.forEach(({ x, y, width, height, class: cls, confidence }) => {
+      const sx = x * xScale,
+            sy = y * yScale,
+            sw = width * xScale,
+            sh = height * yScale;
       ctx.strokeRect(sx, sy, sw, sh);
       ctx.fillText(`${cls} ${(confidence * 100).toFixed(1)}%`, sx, sy - 5);
     });
   };
 
   return (
-    <div style={{ position: "relative" }}>
-      <h3>Annotated Image</h3>
-      {imageUrl && (
-        <img
-          ref={imgRef}
-          src={imageUrl}
-          alt="Converted"
-          onLoad={onImageLoad}
-          style={{ display: "block", maxWidth: "100%" }}
-        />
-      )}
-      <canvas
-        ref={canvasRef}
-        style={{ position: "absolute", top: 0, left: 0 }}
-      />
-      <button disabled={loading || !imageUrl} onClick={runDetection}>
-        {loading ? "Detecting..." : "Run Detection"}
-      </button>
+    <div className="image-grid">
+      {imageUrls.map((url, idx) => (
+        <div key={idx} style={{ position: "relative", marginBottom: 24 }}>
+          <img
+            ref={(el) => (imgRefs.current[idx] = el)}
+            src={url}
+            alt={`upload-${idx}`}
+            style={{ display: "block", maxWidth: "100%" }}
+          />
+          <canvas
+            ref={(el) => (canvasRefs.current[idx] = el)}
+            style={{ position: "absolute", top: 0, left: 0 }}
+          />
+          
+          {loadingMap[idx] && <Spinner />}
+
+          <button
+            disabled={loadingMap[idx]}
+            onClick={() => runDetection(idx)}
+            style={{ marginTop: 8 }}
+          >
+            {loadingMap[idx] ? "Detecting..." : "Run Detection"}
+          </button>
+        </div>
+      ))}
     </div>
   );
 }

@@ -5,23 +5,29 @@ import ReportViewer from "./components/reportViewer";
 import "./App.css";
 
 export default function App() {
-  const [originalImageUrl, setOriginalImageUrl] = useState(null);
-  const [annotations, setAnnotations] = useState(null);
-  const [report, setReport] = useState("");
+  // Track multiple files, their annotations, and generated reports
+  const [imageUrls, setImageUrls] = useState([]);
+  const [annotations, setAnnotations] = useState([]);
+  const [reports, setReports] = useState([]);
 
   return (
     <div className="app-container">
+      {/* Upload DICOM(s) */}
       <div className="panel left">
-        <FileUpload onUpload={setOriginalImageUrl} />
+        <FileUpload onUpload={setImageUrls} />
       </div>
+
+      {/* Display and detect on each image */}
       <div className="panel center">
-        <ImageCanvas imageUrl={originalImageUrl} onDetect={setAnnotations} />
+        <ImageCanvas imageUrls={imageUrls} onDetect={setAnnotations} />
       </div>
+
+      {/* Show a report per image */}
       <div className="panel right">
         <ReportViewer
           annotations={annotations}
-          onReport={setReport}
-          report={report}
+          onReport={setReports}
+          report={reports}
         />
       </div>
     </div>
