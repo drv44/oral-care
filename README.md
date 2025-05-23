@@ -42,7 +42,7 @@ A full-stack web application for detecting dental pathologies in DICOM X-ray ima
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/oralcare-app.git
+   git clone https://github.com/your-username/oral-care.git
    cd oralcare-app/backend
    ```
 
