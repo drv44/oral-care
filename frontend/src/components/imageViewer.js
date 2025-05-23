@@ -67,7 +67,7 @@ export default function ImageCanvas({ imageUrls = [], onDetect }) {
             ref={(el) => (imgRefs.current[idx] = el)}
             src={url}
             alt={`upload-${idx}`}
-            style={{ display: "block", maxWidth: "100%" }}
+            style={{ display: "block", maxWidth: "50%" }}
           />
           <canvas
             ref={(el) => (canvasRefs.current[idx] = el)}
