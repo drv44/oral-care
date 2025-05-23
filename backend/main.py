@@ -79,12 +79,16 @@ async def detect(file: UploadFile = File(...)):
     return JSONResponse(content=result)
 
 
-from fastapi.responses import JSONResponse
-import openai  
-
-openai.api_key = "" 
-
 from fastapi import Body
+from google import genai
+from dotenv import load_dotenv
+
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+# Initialize Gemini client with API key from environment
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 @app.post("/report/")
 async def report(
@@ -94,17 +98,21 @@ async def report(
     if not annotations or not isinstance(annotations, list):
         raise HTTPException(status_code=400, detail="Expected a non-empty list of annotations.")
 
-    # 2) Generate report via OpenAI or mock
-    if openai.api_key:
-        resp = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a dental radiologist."},
-                {"role": "user", "content": f"Given these annotations: {annotations}, write a concise diagnostic report."},
-            ]
-        )
-        text = resp.choices[0].message.content
+    # 2) Generate report via Gemini API
+    if GEMINI_API_KEY:
+        try:
+            response = client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=(
+                    "You are a dental radiologist. "
+                    f"Given these annotations: {annotations}, write a concise diagnostic report."
+                ),
+            )
+            text = response.text
+        except Exception as e:
+            raise HTTPException(status_code=502, detail=f"Gemini API error: {str(e)}")
     else:
+        # Fallback/mock report
         text = "Mock report: Detected cavity on upper left molar, confidence 92%."
 
     return JSONResponse({"report": text})
