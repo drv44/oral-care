@@ -142,10 +142,10 @@ project-root/
 
 ## 📷 Preview
 
-![App Screenshot](.docs/images/landing-page.png)
-![App Screenshot](.docs/images/file-upload-conversion.png)
-![App Screenshot](.docs/images/visualization.png)
-![App Screenshot](.docs/images/report-generation.png)
+![App Screenshot](/docs/images/landing-page.png)
+![App Screenshot](/docs/images/file-upload-conversion.png)
+![App Screenshot](/docs/images/visualization.png)
+![App Screenshot](/docs/images/report-generation.png)
 
 ---
 
