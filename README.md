@@ -142,7 +142,10 @@ project-root/
 
 ## 📷 Preview
 
-![App Screenshot](https://github.com/user-attachments/assets/082c45ca-2b32-4e35-97ee-eb4a43f623ab)
+![App Screenshot](.docs/images/landing-page.png)
+![App Screenshot](.docs/images/file-upload-conversion.png)
+![App Screenshot](.docs/images/visualization.png)
+![App Screenshot](.docs/images/report-generation.png)
 
 ---
 
