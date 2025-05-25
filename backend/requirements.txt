@@ -3,7 +3,7 @@ uvicorn
 pydicom
 pillow
 requests
-inference_sdk
+inference-sdk
 python-multipart
 pylibjpeg
 pylibjpeg-libjpeg
