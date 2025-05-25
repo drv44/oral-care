@@ -1,6 +1,6 @@
 import axios from "axios";
 const client = axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: "https://oral-care.onrender.com",
 });
 
 export default client;
