@@ -8,6 +8,5 @@ python-multipart
 pylibjpeg
 pylibjpeg-libjpeg
 pylibjpeg-openjpeg
-google
 google-genai
 python-dotenv
