@@ -5,6 +5,11 @@ A full-stack web application for detecting dental pathologies in DICOM X-ray ima
 
 ---
 
+## Live Link
+https://oral-care.vercel.app
+
+---
+
 ## Features
 
 * Upload and view Dental DICOM (.dcm or .rvg) images
@@ -21,7 +26,7 @@ A full-stack web application for detecting dental pathologies in DICOM X-ray ima
 
 **Frontend**: React, Tailwind CSS
 **Backend**: FastAPI, Uvicorn
-**AI Services**: Roboflow (object detection), OpenAI GPT (report generation)
+**AI Services**: Roboflow (object detection), Gemini 2.0-flash (report generation)
 **Languages**: Python, JavaScript
 **Others**: DICOM (via pydicom), PIL (image conversion), inference-sdk
 
@@ -43,7 +48,7 @@ A full-stack web application for detecting dental pathologies in DICOM X-ray ima
 
    ```bash
    git clone https://github.com/your-username/oral-care.git
-   cd oralcare-app/backend
+   cd oral-care/backend
    ```
 
 2. **Create Virtual Environment**
@@ -75,8 +80,7 @@ A full-stack web application for detecting dental pathologies in DICOM X-ray ima
 5. **Set Required Environment Variables**
 
    ```bash
-   set ROBOFLOW_API_KEY=your_roboflow_api_key
-   set OPENAI_API_KEY=your_openai_api_key
+   set GEMINI_API_KEY=your_Gemini_api_key
    ```
 
 6. **Start FastAPI Server**
@@ -151,5 +155,5 @@ project-root/
 
 ## 🔐 API Keys
 
-Make sure to set your **Roboflow** and **OpenAI** API keys as environment variables before running the app:
+Make sure to set your **Gemini** API key as environment variables before running the app:
 
