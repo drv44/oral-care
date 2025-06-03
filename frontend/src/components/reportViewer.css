@@ -1,0 +1,60 @@
+/* ───────────────────────────────────────────────────────────────────
+   ReportViewer Styles
+──────────────────────────────────────────────────────────────────── */
+
+/* Container grid: two columns on desktop, one column on mobile */
+.report-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Each report “card” */
+.report-card {
+    position: relative;
+    /* for Spinner overlay */
+    background-color: var(--color-card-bg);
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Title inside each card */
+.report-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-secondary);
+    margin-bottom: 0.75rem;
+}
+
+/* Paragraph text: preserves whitespace/newlines */
+.report-text {
+    white-space: pre-wrap;
+    flex: 1;
+    /* allow text to fill remaining space */
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* Center Spinner absolutely over the card */
+.report-card>.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+/* Responsive: if viewport narrows, stack cards */
+@media (max-width: 768px) {
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+}

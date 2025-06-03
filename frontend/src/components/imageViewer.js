@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import client from "../api/client";
 import Spinner from "./Spinner";
+import "./imageViewer.css"
 
 export default function ImageCanvas({ imageUrls = [], onDetect }) {
   // refs and loading flags per image
@@ -59,32 +60,67 @@ export default function ImageCanvas({ imageUrls = [], onDetect }) {
     });
   };
 
+  // return (
+  //   <div className="image-grid">
+  //     {imageUrls.map((url, idx) => (
+  //       <div key={idx} style={{ position: "relative", marginBottom: 24 }}>
+  //         <img
+  //           ref={(el) => (imgRefs.current[idx] = el)}
+  //           src={url}
+  //           alt={`upload-${idx}`}
+  //           style={{ display: "block", maxWidth: "50%" }}
+  //         />
+  //         <canvas
+  //           ref={(el) => (canvasRefs.current[idx] = el)}
+  //           style={{ position: "absolute", top: 0, left: 0 }}
+  //         />
+          
+  //         {loadingMap[idx] && <Spinner />}
+
+  //         <button
+  //           disabled={loadingMap[idx]}
+  //           onClick={() => runDetection(idx)}
+  //           style={{ marginTop: 8 }}
+  //         >
+  //           {loadingMap[idx] ? "Detecting..." : "Run Detection"}
+  //         </button>
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
+
   return (
     <div className="image-grid">
       {imageUrls.map((url, idx) => (
-        <div key={idx} style={{ position: "relative", marginBottom: 24 }}>
-          <img
-            ref={(el) => (imgRefs.current[idx] = el)}
-            src={url}
-            alt={`upload-${idx}`}
-            style={{ display: "block", maxWidth: "50%" }}
-          />
-          <canvas
-            ref={(el) => (canvasRefs.current[idx] = el)}
-            style={{ position: "absolute", top: 0, left: 0 }}
-          />
-          
-          {loadingMap[idx] && <Spinner />}
+        <div key={idx} className="image-card">
+          {/* Title above each image */}
+          <p className="image-title">Image #{idx + 1}</p>
+
+          <div className="image-wrapper">
+            <img
+              ref={(el) => (imgRefs.current[idx] = el)}
+              src={url}
+              alt={`upload-${idx}`}
+              className="image-img"
+            />
+
+            <canvas
+              ref={(el) => (canvasRefs.current[idx] = el)}
+              className="overlay-canvas"
+            />
+
+            {loadingMap[idx] && <Spinner />}
+          </div>
 
           <button
+            className="detect-button"
             disabled={loadingMap[idx]}
             onClick={() => runDetection(idx)}
-            style={{ marginTop: 8 }}
           >
             {loadingMap[idx] ? "Detecting..." : "Run Detection"}
           </button>
         </div>
       ))}
     </div>
-  );
+  );  
 }

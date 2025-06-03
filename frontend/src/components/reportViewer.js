@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import client from "../api/client";
+import "./reportViewer.css"
 
 export default function ReportViewer({
   annotations = [], // array of prediction-arrays
@@ -49,14 +50,32 @@ export default function ReportViewer({
     });
   }, [annotations, onReport]);
 
+  // return (
+  //   <div className="report-grid">
+  //     {annotations.map((_, idx) => (
+  //       <div key={idx} style={{ position: "relative", padding: 16, border: "1px solid #ccc", borderRadius: 8, marginBottom: 24 }}>
+  //         <h4>Image #{idx + 1} Report</h4>
+  //         {loadingMap[idx] && <Spinner />}
+  //         {!loadingMap[idx] && (
+  //           <p style={{ whiteSpace: "pre-wrap" }}>
+  //             {report[idx] || "Waiting for data..."}
+  //           </p>
+  //         )}
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
+
   return (
     <div className="report-grid">
       {annotations.map((_, idx) => (
-        <div key={idx} style={{ position: "relative", padding: 16, border: "1px solid #ccc", borderRadius: 8, marginBottom: 24 }}>
-          <h4>Image #{idx + 1} Report</h4>
+        <div key={idx} className="report-card">
+          <h4 className="report-title">Image #{idx + 1} Report</h4>
+
           {loadingMap[idx] && <Spinner />}
+
           {!loadingMap[idx] && (
-            <p style={{ whiteSpace: "pre-wrap" }}>
+            <p className="report-text">
               {report[idx] || "Waiting for data..."}
             </p>
           )}

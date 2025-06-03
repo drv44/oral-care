@@ -1,0 +1,55 @@
+/* -------------------
+   FileUpload Styles
+   ------------------- */
+
+/* Container: center contents, keep relative positioning so Spinner overlays correctly */
+.file-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* center horizontally */
+    justify-content: center;
+    /* center vertically in its panel */
+    position: relative;
+    /* allows Spinner’s absolute positioning */
+    flex: 1;
+    /* expand to fill its parent panel */
+    padding: 1rem;
+}
+
+/* Title/H3 styling (optional tweak) */
+.file-upload-title {
+    font-size: 1.25rem;
+    color: var(--color-secondary);
+    margin-bottom: 1rem;
+}
+
+/* Hide the native file‐selector input */
+.file-input-hidden {
+    display: none;
+}
+
+/* Button: matching our brand colors and modern card style */
+.upload-button {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-button:hover {
+    background-color: #247a75;
+    /* slightly darker teal on hover */
+}
+
+.upload-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

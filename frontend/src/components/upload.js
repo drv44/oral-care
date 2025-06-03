@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import client from "../api/client";
 import Spinner from "./Spinner";
+import "./upload.css"
 
 export default function FileUpload({ onUpload }) {
   const fileInput = useRef();
@@ -29,9 +30,34 @@ export default function FileUpload({ onUpload }) {
     }
   };
 
+  // return (
+  //   <div style={{ position: "relative", alignItems: "center"}}>
+  //     <h3>Upload DICOM(s)</h3>
+  //     <input
+  //       type="file"
+  //       accept=".dcm,.rvg"
+  //       multiple
+  //       ref={fileInput}
+  //       onChange={uploadAll}
+  //       disabled={loading}
+  //     />
+
+  //     {loading && <Spinner />}
+
+  //     <button
+  //       disabled={loading}
+  //       onClick={() => fileInput.current.click()}
+  //       style={{ marginTop: "8px" }}
+  //     >
+  //       {loading ? "Uploading..." : "Get Diagnosis"}
+  //     </button>
+  //   </div>
+  // );
   return (
-    <div style={{ position: "relative" }}>
-      <h3>Upload DICOM(s)</h3>
+    <div className="file-upload-container">
+      <h3 className="file-upload-title">Upload DICOM(s)</h3>
+
+      {/* Hide the native file input visually */}
       <input
         type="file"
         accept=".dcm,.rvg"
@@ -39,16 +65,18 @@ export default function FileUpload({ onUpload }) {
         ref={fileInput}
         onChange={uploadAll}
         disabled={loading}
+        className="file-input-hidden"
       />
 
+      {/* Show a spinner if loading */}
       {loading && <Spinner />}
 
       <button
+        className="upload-button"
         disabled={loading}
         onClick={() => fileInput.current.click()}
-        style={{ marginTop: "8px" }}
       >
-        {loading ? "Uploading..." : "Select & Upload Files"}
+        {loading ? "Uploading..." : "Get Diagnosis"}
       </button>
     </div>
   );
